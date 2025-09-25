@@ -1,0 +1,40 @@
+---
+title: "2025.9.26"
+output: html_document
+---
+
+library(tidyverse)
+visitors <- read_csv("data/UK-visitor-numbers.csv")%>%
+
+visitors%>%summarise_all(class)
+#2#
+
+visitors%>%arrange(desc(n_2022))
+#3#
+
+visitors%>%
+filter(attraction=="National Museum of Scotland")%>%
+select(attraction,admission)
+#4#
+
+
+filter( visitors,setting=="O",
+        region=="Yorkshire and the Humber",
+        admission=="Members",
+        n_2022 > 100000)
+#5#          
+
+#Q1#
+#a#
+visitors%>%count(region)
+#b# 
+visitors%>%count(admission,setting)
+
+#Q3#
+#3#
+visitors%>%arrange(desc(n_2021))
+
+
+                
+                
+                
