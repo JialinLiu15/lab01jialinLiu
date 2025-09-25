@@ -34,7 +34,116 @@ visitors%>%count(admission,setting)
 #3#
 visitors%>%arrange(desc(n_2021))
 
+#Q4#
+#d#
+visitors%>%filter(n_2022==565772)
+#e#
+visitors%>%filter(n_2022==1000000)
 
-                
-                
-                
+#Q5#
+#f#
+visitors%>%filter(n_2022>5000 & n_2022<10000)               
+
+#g#
+visitors%>%group_by(region)%>%
+count(n()>50)%>%
+summarise(num_region=n())
+
+#6#
+visitors%>%
+summarise(mean_2022=mean(n_2022),med_2022=median(n_2022))
+
+#7#
+visitors%>%
+group_by(setting)%>%
+summarise(
+          mean_2022=mean(n_2022,na.rm=TRUE),
+          med_2022=median(n_2022,na.rm=TRUE))%>%
+          arrange(desc(mean_2022),desc(med_2022)
+          )
+#8#
+
+#Q6#
+#h#
+visitors%>%
+summarise(mean_2021=mean(n_2021),med_2021=median(n_2021))
+#i#
+#NA stands for some of values of 2021 might be NA or the type of 2021 might be character but the type is double so NA stands for some of values of 2021 might be NA #
+
+#j#
+visitors%>%
+summarise(mean_2021=mean(n_2021,na.rm=TRUE),
+          med_2021=median(n_2021,na.rm=TRUE)
+          )
+#k#
+#mean>median refers to skewed to right, which refers to more smallar values and some outliers liffting the mean #
+
+#Q8#
+visitors_with_nations <- visitors %>%
+  mutate(
+    nation = case_when(
+      region == "Northern Ireland" ~ "Northern Ireland",
+      region == "Scotland" ~ "Scotland",
+      region == "Wales" ~ "Wales",
+      TRUE ~ "England"
+    )
+  )
+visitors_with_nations %>% 
+  group_by(nation) %>%
+  summarise(
+    IQR_2022 = IQR(n_2022)
+  )
+
+#L#
+visitors_with_nations <- visitors %>%
+  mutate(
+    nation = case_when(
+      region == "Northern Ireland" ~ "Northern Ireland",
+      region == "Scotland" ~ "Scotland",
+      region == "Wales" ~ "Waes",
+      TRUE ~ "England"
+    )
+  )
+visitors_with_nations%>%
+group_by(nation)%>%
+count()
+
+#m#
+visitors_with_nations <- visitors %>%
+  mutate(
+    nation = case_when(
+      region == "Northern Ireland" ~ "Northern Ireland",
+      region == "Scotland" ~ "Scotland",
+      region == "Wales" ~ "Wales",
+      TRUE ~ "England"
+    )
+  )
+visitors_with_nations%>%
+group_by(nation)%>%
+summarise(
+ total_attraction=n(),
+ free_attraction=sum(admission=="Free",na.rm=TRUE),
+proportion=free_attraction/total_attraction*100
+)
+
+#n#
+visitors_with_nations <- visitors %>%
+  mutate(
+    nation = case_when(
+      region == "Northern Ireland" ~ "Northern Ireland",
+      region == "Scotland" ~ "Scotland",
+      region == "Wales" ~ "Wales",
+      TRUE ~ "England"
+    )
+  )
+visitors_with_nations%>%
+group_by(nation)%>%
+filter(region=="Scotland")%>%
+reframe(
+total_2022=sum(n_2022,na.rm=TRUE),
+total_2021=sum(n_2021,na.rm=TRUE),
+)%>%
+ mutate(proportion=((total_2022-total_2021)/total_2021)*100)
+ 
+ 
+ 
