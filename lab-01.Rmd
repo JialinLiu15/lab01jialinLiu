@@ -143,6 +143,7 @@ _How many regions have more than 50 tourist attraction in the data set? (Hint: Y
 ```{r Ex_g}
 visitors %>% 
   count(region)%>%
+  #因为每一行都是一个attraction所以count（region）就相当于数以一个region有几行，反映到这道题中就是数每一个region有几个attraction#
   filter(n>50)
   
  
@@ -262,7 +263,7 @@ visitors_with_nations <- visitors %>%
   )
 visitors_with_nations%>%
 group_by(nation)%>%
-  count()
+  count()#这里相当于按照nation分类之后数每一个nation有几个attraction#
 ```
 
 
@@ -288,6 +289,7 @@ summarise(total_attractions=n(),
           free_attractions=sum(admission=="Free",na.rm = TRUE),
 proportion=total_attractions/free_attractions*100
 )
+#这里的n()相当于返回每一个分组的行数#
 
 ```
 
