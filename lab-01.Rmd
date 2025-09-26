@@ -142,8 +142,9 @@ _How many regions have more than 50 tourist attraction in the data set? (Hint: Y
 
 ```{r Ex_g}
 visitors %>% 
-  group_by(region) %>%
-filter(region>50)
+  count(region)%>%
+  filter(n>50)
+  
  
 ```
 
