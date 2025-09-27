@@ -262,8 +262,7 @@ visitors_with_nations <- visitors %>%
     )
   )
 visitors_with_nations%>%
-group_by(nation)%>%
-  count()#这里相当于按照nation分类之后数每一个nation有几个attraction#
+count(nation)#这里相当于按照nation分类之后数每一个nation有几行，一行是一个attraction所以相当于数每个nation有几个attraction#
 ```
 
 
@@ -285,11 +284,14 @@ visitors_with_nations <- visitors %>%
     )
   )
 visitors_with_nations%>%
-summarise(total_attractions=n(),
-          free_attractions=sum(admission=="Free",na.rm = TRUE),
-proportion=total_attractions/free_attractions*100
-)
-#这里的n()相当于返回每一个分组的行数#
+group_by(nation)%>%
+  count(admission)%>%
+  #执行到这一行n就是每一种admission的个数# #这一行直接就返回了每个国家每一种admission的个数#
+  mutate(pct=100*n/sum(n))%>%
+#这一行sum(n)代表的是每一个国家总的景点数，因为我们在group——by nation 的条件之下所以sum(n)相当于统计国家的总景点数把每个国家每个admission的个数相加，如果我们只执行到mutate sum()那么会返回n后面新增一列对应的是各个国家的总admission。之后pct=是在命名一个算法相当于每一行用这一行的n/sum(n)*100就是对应的百分比#
+filter(admission=="Free")%>%
+  arrange(desc(pct))
+#之后这两行：292行是在选取Free，294行是在降序排列#
 
 ```
 
@@ -309,11 +311,11 @@ visitors_with_nations <- visitors %>%
     )
   )
 visitors_with_nations%>%
-     group_by(nation)%>%
-     filter(nation=="Scotland")%>%
-     summarise(total_2022=sum(n_2022,na.rm=TRUE),
-               total_2021=sum(n_2021,na.rm=TRUE),
-
-proportion=(total_2022-total_2021)/total_2021*100)
-
+mutate(pct_change = (n_2022-n_2021)/n_2021)%>% #这一行是利用公式新增一行并计算每一个景点的游客数量百分比变化#
+filter(nation=="Scotland")%>%
+#之后筛选出所有苏格兰景点#
+group_by(admission)%>%
+summarise(mean_pct_change=mean(pct_change,na.rm=TRUE))%>%
+#这里在group——by——pct的条件之下，对每种admission类型的景点求平均值#
+arrange(mean_pct_change)
 ```
